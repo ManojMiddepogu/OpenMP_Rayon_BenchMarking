@@ -1,11 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <omp.h>
+#include <string>
+#include <map>
+#include "../utils/utils.h"
 
 // Function to multiply two matrices using OpenMP
 void matrixMultiply(const std::vector<std::vector<int>>& A, const std::vector<std::vector<int>>& B, std::vector<std::vector<int>>& result) {
     int size = A.size();
-
+    int numThreads = omp_get_num_threads();
+    double start_time, end_time;
+    start_time = omp_get_wtime();
     #pragma omp parallel for
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
@@ -15,6 +20,8 @@ void matrixMultiply(const std::vector<std::vector<int>>& A, const std::vector<st
             }
         }
     }
+    end_time = omp_get_wtime();
+    printf("Threads: %d Time Taken:%f\n",numThreads , end_time-start_time); 
 }
 
 int main() {
@@ -28,31 +35,5 @@ int main() {
 
     // Multiply matrices using OpenMP
     matrixMultiply(A, B, result);
-
-    // Display the result
-    std::cout << "Matrix A:" << std::endl;
-    for (const auto& row : A) {
-        for (int element : row) {
-            std::cout << element << ' ';
-        }
-        std::cout << std::endl;
-    }
-
-    std::cout << "Matrix B:" << std::endl;
-    for (const auto& row : B) {
-        for (int element : row) {
-            std::cout << element << ' ';
-        }
-        std::cout << std::endl;
-    }
-
-    std::cout << "Result:" << std::endl;
-    for (const auto& row : result) {
-        for (int element : row) {
-            std::cout << element << ' ';
-        }
-        std::cout << std::endl;
-    }
-
     return 0;
 }
