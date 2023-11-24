@@ -9,5 +9,6 @@ using namespace std;
 // Declare your functions here
 string removeSpacesAndNewLines(const string& jsonString);
 map<string, int> parseJSONToMap(const string& jsonString);
+map<string, int> readJsonFile(const string& filename);
 
 #endif

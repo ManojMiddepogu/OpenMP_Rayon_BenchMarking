@@ -1,7 +1,10 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <map>
 #include <stdexcept>
+
 #include "utils.h"
 
 string removeSpacesAndNewLines(const string& jsonString){
@@ -69,3 +72,18 @@ map<string, int> parseJSONToMap(const string& jsonString) {
     return resultMap;
 }
 
+map<string, int> readJsonFile(const string& filename){
+    // Read JSON from file
+    ifstream jsonFile(filename);
+
+    if (!jsonFile.is_open()) {
+        throw runtime_error("Failed to open JSON file\n");
+    }
+
+    stringstream buffer;
+    buffer << jsonFile.rdbuf();
+    string json = buffer.str();
+    json = removeSpacesAndNewLines(json);
+
+    return parseJSONToMap(json);
+}
