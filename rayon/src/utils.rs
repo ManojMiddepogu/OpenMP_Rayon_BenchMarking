@@ -42,7 +42,7 @@ pub fn read_json_file(file_path: &str) -> Result<HashMap<String, i32>, String> {
     //     Err(e) => Err(format!("Error parsing JSON: {}", e)),
     // }
     
-    let json_value: Value = serde_json::from_str(&json_string)?;
+    let json_value: Value = serde_json::from_str(&json_string).unwrap();
     println!("{:?}", json_value);
 
     let hashmap: HashMap<String, i32> = json_value
