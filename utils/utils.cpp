@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <stdexcept>
+#include <vector>
 
 #include "utils.h"
 
@@ -72,6 +73,7 @@ map<string, int> parseJSONToMap(const string& jsonString) {
     return resultMap;
 }
 
+
 map<string, int> readJsonFile(const string& filename){
     // Read JSON from file
     ifstream jsonFile(filename);
@@ -86,4 +88,43 @@ map<string, int> readJsonFile(const string& filename){
     json = removeSpacesAndNewLines(json);
 
     return parseJSONToMap(json);
+}
+
+void writeCSV(const std::string& filename, const vector<vector<double>>& data) {
+    std::ofstream file(filename);
+
+    if (!file.is_open()) {
+        std::cerr << "Error opening the file: " << filename << std::endl;
+        return;
+    }
+
+    for (const auto& row : data) {
+        for (const auto& cell : row) {
+            file << cell << ",";
+        }
+        // Move to the next line after each row
+        file << "\n";
+    }
+
+    file.close();
+    std::cout << "Data written to " << filename << " successfully." << std::endl;
+}
+
+string args_to_str(map<string, int> args){
+    string result = "";
+    for (auto& arg: args){
+        result += "_" + arg.first + "_" + to_string(arg.second);
+    }
+
+    return result;
+}
+
+vector<double> arr_to_vec(double arr[], int n){
+    vector<double> result;
+
+    for (int i=0; i<n; i++){
+        result.push_back(arr[i]);
+    }
+
+    return result;
 }

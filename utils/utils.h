@@ -10,5 +10,8 @@ using namespace std;
 string removeSpacesAndNewLines(const string& jsonString);
 map<string, int> parseJSONToMap(const string& jsonString);
 map<string, int> readJsonFile(const string& filename);
+void writeCSV(const string& filename, const vector<vector<double>>& data);
+string args_to_str(map<string, int> args);
+vector<double> arr_to_vec(double arr[], int n);
 
 #endif
