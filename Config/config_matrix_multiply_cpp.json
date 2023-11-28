@@ -1,7 +1,4 @@
 {
-    "num_threads" : 4,
-    "runs": 1000,
-    "size": 10,
-    "linear": 0,
-    "2d":1
+    "num_threads" : 8,
+    "runs": 3
 }
