@@ -10,7 +10,7 @@ using namespace std;
 
 int main() {
     // Read JSON from file
-    string config_file_pth = "../Config/config_matrix_multiply_cpp.json";
+    string config_file_pth = "../Config/profile.json";
     string output_folder = "../output_csvs/";
 
     // Parse JSON and create a map
@@ -50,12 +50,29 @@ int main() {
         // Total exceution time for 
         end_time = omp_get_wtime();
         total_time[0] = end_time - start_time;
-        printf("Runs %d, Threads %d, total time: %f seconds\n", runs, num_threads, total_time[0]);
+        printf("Total Time: Runs %d, Threads %d, total time: %f seconds\n", runs, num_threads, total_time[0]);
 
         // Group times
         thread_creation_times.push_back(arr_to_vec(creation_times, num_threads));
         thread_execution_times.push_back(arr_to_vec(execution_times, num_threads));
         thread_total_times.push_back(arr_to_vec(total_time, 1));
+
+        double sum = 0.0;
+        size_t totalElements = 0;
+
+        for (const auto& row : thread_creation_times) {
+            for (const auto& element : row) {
+                sum += element;
+                totalElements++;
+            }
+        }
+
+        // Check if there are elements to avoid division by zero
+        double average = (totalElements > 0) ? sum / totalElements : 0.0;
+
+        // Print the average
+        std::cout << "Average: " << average << std::endl;
+
 
         runs++;
     }

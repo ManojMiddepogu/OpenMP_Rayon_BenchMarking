@@ -1,4 +1,11 @@
 {
-    "num_threads" : 8,
-    "runs": 3
+    "num_threads" : 1,
+    "runs": 1,
+    "size": 1024,
+    "row_parallel": 0,
+    "block_parallel": 1,
+    "block_size": 16,
+    "strassens": 0,
+    "linear_matrix": 0,
+    "linear_matrix_block": 0
 }
