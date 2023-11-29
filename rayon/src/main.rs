@@ -1,12 +1,13 @@
 use rayon::prelude::*;
 use std::time::Instant;
 use std::collections::HashMap;
+use rayon::current_num_threads;
 
 mod utils;
 
 fn main() {
     // Read JSON from file
-    let config_file_path = "../Config/config_matrix_multiply_cpp.json";
+    let config_file_path = "../Config/profile.json";
     let output_folder = "../output_csvs/";
 
     // Parse JSON and create a map
@@ -24,6 +25,9 @@ fn main() {
 
     let total_runs = args["runs"];
     let num_threads = args["num_threads"];
+    rayon::ThreadPoolBuilder::new().num_threads(num_threads.try_into().unwrap()).build_global().unwrap();
+    let threads = current_num_threads();
+    println!("Threads: {}", threads);
 
     let mut thread_creation_times: Vec<Vec<f64>> = Vec::new();
     let mut thread_execution_times: Vec<Vec<f64>> = Vec::new();
@@ -36,19 +40,19 @@ fn main() {
             .into_par_iter()
             .map(|thread_no| {
                 let thread_creation_time = start_time.elapsed().as_secs_f64();
-                println!(
-                    "Run {}, Thread {} creation time: {} seconds",
-                    runs, thread_no, thread_creation_time
-                );
+                // println!(
+                //     "Run {}, Thread {} creation time: {} seconds",
+                //     runs, thread_no, thread_creation_time
+                // );
 
                 // Work goes here
                 std::thread::sleep(std::time::Duration::from_secs(1));
 
                 let thread_execution_time = start_time.elapsed().as_secs_f64();
-                println!(
-                    "Run {}, Thread {} execution time: {} seconds",
-                    runs, thread_no, thread_execution_time
-                );
+                // println!(
+                //     "Run {}, Thread {} execution time: {} seconds",
+                //     runs, thread_no, thread_execution_time
+                // );
 
                 (thread_creation_time, thread_execution_time)
             })
@@ -65,23 +69,32 @@ fn main() {
         thread_creation_times.push(creation_times);
         thread_execution_times.push(execution_times);
         thread_total_times.push(total_time);
+        let flattened_times: Vec<f64> = thread_creation_times.iter().flat_map(|row| row.iter()).cloned().collect();
+
+        // Calculate the sum of all elements
+        let sum: f64 = flattened_times.iter().sum();
+
+        // Calculate the average
+        let average = sum / (flattened_times.len() as f64);
+
+        println!("Average: {}", average);
     }
 
     // Pushing data to csv
     let thread_creation_filename = format!(
-        "{}thread_creation{}{}.csv",
+        "{}rayon_thread_creation{}{}.csv",
         output_folder,
         utils::args_to_str(&args),
         ".csv"
     );
     let thread_execution_filename = format!(
-        "{}thread_execution{}{}.csv",
+        "{}rayon_thread_execution{}{}.csv",
         output_folder,
         utils::args_to_str(&args),
         ".csv"
     );
     let thread_totaltime_filename = format!(
-        "{}thread_total_times{}{}.csv",
+        "{}rayon_thread_total_times{}{}.csv",
         output_folder,
         utils::args_to_str(&args),
         ".csv"
