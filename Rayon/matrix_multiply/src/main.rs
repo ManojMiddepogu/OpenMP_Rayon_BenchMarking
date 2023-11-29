@@ -9,7 +9,6 @@ use std::time::Instant;
 
 // Done
 fn parallel_matrix_multiply(a: &[Vec<i32>], b: &[Vec<i32>]) -> Vec<Vec<i32>> {
-    assert_eq!(a.len(), b.len());
     let size = a.len();
     let mut result = vec![vec![0; size]; size];
 
@@ -34,8 +33,6 @@ fn parallel_matrix_multiply(a: &[Vec<i32>], b: &[Vec<i32>]) -> Vec<Vec<i32>> {
 }
 
 fn matrix_multiply(a: &[Vec<i32>], b: &[Vec<i32>]) -> Vec<Vec<i32>> {
-    assert!(!a.is_empty() && !a[0].is_empty() && a[0].len() == b.len());
-
     let rows_a = a.len();
     let cols_a = a[0].len();
     let cols_b = b[0].len();
